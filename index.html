@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Coconut Detection - Demo</title>
+
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        background: #0d0f1a;
+        font-family: Poppins, sans-serif;
+        color: white;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 30px;
+    }
+
+    h1 {
+        color: #c084fc;
+        text-shadow: 0 0 10px #b06bff;
+        text-align: center;
+    }
+
+    .card {
+        width: 90%;
+        max-width: 900px;
+        background: rgba(255,255,255,0.06);
+        padding: 25px;
+        border-radius: 18px;
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(255,255,255,0.15);
+        box-shadow: 0 0 25px rgba(168,85,247,0.4);
+        margin-top: 20px;
+    }
+
+    video, img {
+        width: 100%;
+        border-radius: 14px;
+        margin-top: 20px;
+        border: 2px solid rgba(255,255,255,0.2);
+    }
+
+    button {
+        background: #a855f7;
+        border: none;
+        padding: 12px 20px;
+        margin-top: 15px;
+        border-radius: 10px;
+        font-size: 16px;
+        cursor: pointer;
+        color: white;
+        box-shadow: 0 0 12px #a855f7;
+        transition: 0.3s ease;
+    }
+
+    button:hover {
+        background: #9333ea;
+        transform: scale(1.05);
+    }
+
+    #filePreview {
+        display: none;
+    }
+
+    .result {
+        margin-top: 20px;
+        padding: 10px;
+        font-size: 18px;
+        font-weight: bold;
+        color: #ff4c4c;
+        text-align: center;
+    }
+
+</style>
+</head>
+
+<body>
+
+<h1>AI-Powered Coconut Detection</h1>
+
+<!-- CAMERA CARD -->
+<div class="card">
+    <h2>📷 Real-Time Camera Detection</h2>
+    <video id="camera" autoplay playsinline></video>
+    <button onclick="detectFromCamera()">Detect From Camera</button>
+    <div id="cameraResult" class="result"></div>
+</div>
+
+<!-- FILE UPLOAD CARD -->
+<div class="card">
+    <h2>🖼️ File Upload Detection</h2>
+    <input type="file" id="imageFile" accept="image/*" onchange="previewFile()">
+    <img id="filePreview">
+    <button onclick="detectFromFile()">Detect From File</button>
+    <div id="fileResult" class="result"></div>
+</div>
+
+<script>
+/* ---------------- CAMERA STREAM ---------------- */
+const video = document.getElementById('camera');
+
+navigator.mediaDevices.getUserMedia({ video: true })
+    .then(stream => { video.srcObject = stream; })
+    .catch(err => {
+        console.log("Camera not accessible: ", err);
+        alert("Camera access blocked or unavailable");
+    });
+
+/* ----------- FILE PREVIEW ----------- */
+function previewFile() {
+    const file = document.getElementById("imageFile").files[0];
+    if (!file) return;
+    const url = URL.createObjectURL(file);
+    const preview = document.getElementById("filePreview");
+    preview.src = url;
+    preview.style.display = "block";
+}
+
+/* ----------- BUTTON ACTIONS SHOW ERROR ----------- */
+function detectFromCamera() {
+    // Camera stays on, just show error message
+    document.getElementById("cameraResult").innerHTML =
+        "Couldn't connect to backend";
+}
+
+function detectFromFile() {
+    document.getElementById("fileResult").innerHTML =
+        "Couldn't connect to backend";
+}
+</script>
+
+</body>
+</html>
